@@ -1,0 +1,24 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": ["taqlyn"],
+  "ios": {
+    "iosModuleName": "TaqlynSdk"
+  },
+  "android": {
+    "androidNamespace": ["taqlyn"],
+    "androidCxxLibName": "TaqlynSdk"
+  },
+  "autolinking": {
+    "TaqlynSdk": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridTaqlynSdk"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridTaqlynSdk"
+      }
+    }
+  },
+  "ignorePaths": ["**/node_modules", "**/sample", "**/lib", "**/tests"]
+}

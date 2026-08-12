@@ -1,0 +1,9 @@
+// Add to the host React Native / Expo app's settings.gradle (sibling checkout):
+//
+// includeBuild("../../sdk-android") {
+//   dependencySubstitution {
+//     substitute(module("com.taqlyn:taqlyn-sdk")).using(project(":taqlyn-sdk"))
+//   }
+// }
+//
+// Or publish once: `cd ../sdk-android && ./gradlew :taqlyn-sdk:publishToMavenLocal`

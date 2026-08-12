@@ -1,0 +1,10 @@
+{
+  "name": "@taqlyn/sdk-react-native-sample",
+  "private": true,
+  "version": "0.0.0",
+  "main": "App.tsx",
+  "dependencies": {
+    "@taqlyn/sdk-react-native": "file:..",
+    "@taqlyn/nav-expo-router": "file:../../nav-expo-router"
+  }
+}
