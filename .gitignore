@@ -4,6 +4,10 @@
 # Expo / harness
 .expo/
 .harness
+sample/.expo/
+sample/ios/
+sample/android/
+sample/.env
 
 # VSCode
 .vscode/

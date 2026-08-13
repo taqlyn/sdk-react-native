@@ -1,0 +1,79 @@
+import { DEFAULT_API_BASE_URL, type ConfigureOptions, type ShareLink, type ShareLinkInput } from './types'
+
+interface Session {
+  clientId: string
+  publicKeyId: string
+  apiBaseUrl: string
+  env?: string
+}
+
+let session: Session | null = null
+
+export function rememberSession(
+  clientId: string,
+  publicKeyId: string,
+  options: ConfigureOptions,
+): ConfigureOptions {
+  const apiBaseUrl = (options.apiBaseUrl ?? DEFAULT_API_BASE_URL).trim().replace(/\/+$/, '')
+  session = {
+    clientId: clientId.trim(),
+    publicKeyId: publicKeyId.trim(),
+    apiBaseUrl,
+    env: options.env,
+  }
+  return { ...options, apiBaseUrl }
+}
+
+export function clearSession(): void {
+  session = null
+}
+
+/** Create a unified short link for in-app sharing (public key id only). */
+export async function createShareLink(input: ShareLinkInput): Promise<ShareLink> {
+  if (!session) {
+    throw new Error('configure before createShareLink')
+  }
+  const path = input.destinationPath?.trim() ?? ''
+  const web = input.destinationWeb?.trim() ?? ''
+  if (!path && !web) {
+    throw new Error('destinationPath or destinationWeb required')
+  }
+
+  const res = await fetch(`${session.apiBaseUrl}/v1/sdk/short-links`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Taqlyn-Client-Id': session.clientId,
+      'X-Taqlyn-Public-Key-Id': session.publicKeyId,
+    },
+    body: JSON.stringify({
+      clientId: session.clientId,
+      publicKeyId: session.publicKeyId,
+      destinationPath: path || undefined,
+      destinationWeb: web || undefined,
+      params: input.params,
+      ogTitle: input.ogTitle,
+      ogDescription: input.ogDescription,
+      ogImage: input.ogImage,
+      env: session.env,
+    }),
+  })
+  if (!res.ok) {
+    throw new Error(`createShareLink failed: ${res.status}`)
+  }
+  const body = (await res.json()) as {
+    id: string
+    code: string
+    shortUrl: string
+    host: string
+    env: string
+  }
+  return {
+    id: body.id,
+    code: body.code,
+    shortUrl: body.shortUrl,
+    host: body.host,
+    env: body.env,
+  }
+}

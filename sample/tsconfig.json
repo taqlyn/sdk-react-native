@@ -1,0 +1,13 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@taqlyn/sdk-react-native": ["../src/index.ts"],
+      "@taqlyn/nav-expo-router": ["../../nav-expo-router/src/index.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "index.js"]
+}

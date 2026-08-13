@@ -7,7 +7,7 @@
 
 import type { DeferredLink, MatchType } from '@taqlyn/sdk-contract'
 import type { DeferredLinkPayload, TaqlynSdk } from '../specs/TaqlynSdk.nitro'
-import type { ConfigureOptions, LinkListener, LinkSubscription } from '../types'
+import { DEFAULT_API_BASE_URL, type ConfigureOptions, type LinkListener, type LinkSubscription } from '../types'
 
 /** Injectable bridge (Nitro Hybrid or test fake). */
 export interface NativeBridge {
@@ -73,7 +73,7 @@ export function createNitroNativeBridge(): NativeBridge {
       hybrid.configure(
         clientId,
         publicKeyId,
-        options.apiBaseUrl,
+        options.apiBaseUrl ?? DEFAULT_API_BASE_URL,
         options.linkProcessingMode ?? 'all',
         options.env ?? '',
       )

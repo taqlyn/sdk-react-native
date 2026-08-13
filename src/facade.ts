@@ -3,6 +3,7 @@ import {
   createNitroNativeBridge,
   type NativeBridge,
 } from './adapters/native-bridge'
+import { rememberSession } from './share'
 import type {
   ConfigureOptions,
   LinkListener,
@@ -30,12 +31,12 @@ export function __setNativeBridgeForTests(next: NativeBridge | null): void {
 export function configure(
   clientId: string,
   publicKeyId: string,
-  options: ConfigureOptions,
+  options: ConfigureOptions = {},
 ): void {
   if (!clientId.trim()) throw new Error('clientId required')
   if (!publicKeyId.trim()) throw new Error('publicKeyId required')
-  if (!options.apiBaseUrl.trim()) throw new Error('options.apiBaseUrl required')
-  getBridge().configure(clientId, publicKeyId, options)
+  const resolved = rememberSession(clientId, publicKeyId, options)
+  getBridge().configure(clientId, publicKeyId, resolved)
 }
 
 export async function resolveDeferred(): Promise<DeferredLink | null> {

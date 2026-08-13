@@ -8,11 +8,41 @@ import type { NativeBridge } from './native-bridge'
 import type { ConfigureOptions, LinkListener } from '../types'
 
 export interface FakeNativeBridgeControls {
+  lastOptions?: ConfigureOptions
   /** Sandbox-shaped payload returned from the next resolveDeferred. */
   setDeferredResult(link: DeferredLink | null): void
+  /** iOS clipboard token → next resolveDeferred (matchType clipboard). */
+  setClipboardToken(token: string | null): void
   /** Emit a warm (non-deferred) link immediately to active listeners. */
   emitWarm(link: DeferredLink): void
+  /** Simulate iOS onOpenURL / Android VIEW intent as a warm link. */
+  onOpenURL(url: string): void
+  onIntent(url: string): void
   reset(): void
+}
+
+function warmFromUrl(url: string): DeferredLink {
+  try {
+    const parsed = new URL(url)
+    const params = Object.fromEntries(parsed.searchParams.entries())
+    return {
+      url,
+      path: parsed.pathname || '/',
+      params,
+      linkId: params.linkId || params.link_id || url,
+      matchType: 'none',
+      isDeferred: false,
+    }
+  } catch {
+    return {
+      url,
+      path: '/',
+      params: {},
+      linkId: url,
+      matchType: 'none',
+      isDeferred: false,
+    }
+  }
 }
 
 export function createFakeNativeBridge(): NativeBridge & FakeNativeBridgeControls {
@@ -20,6 +50,7 @@ export function createFakeNativeBridge(): NativeBridge & FakeNativeBridgeControl
   let ready = false
   let pending: DeferredLink | null = null
   let nextResolve: DeferredLink | null = null
+  let clipboardToken: string | null = null
   let resolvedOnce = false
   let mode: ConfigureOptions['linkProcessingMode'] = 'all'
   const listeners = new Set<LinkListener>()
@@ -32,13 +63,14 @@ export function createFakeNativeBridge(): NativeBridge & FakeNativeBridgeControl
     }
   }
 
-  return {
+  const controls: NativeBridge & FakeNativeBridgeControls = {
     configure(_clientId, _publicKeyId, options) {
       configured = true
       ready = false
       pending = null
       resolvedOnce = false
       mode = options.linkProcessingMode ?? 'all'
+      controls.lastOptions = { ...options }
     },
 
     async resolveDeferred() {
@@ -46,8 +78,20 @@ export function createFakeNativeBridge(): NativeBridge & FakeNativeBridgeControl
       if (mode === 'web-only') return null
       if (resolvedOnce) return null
       resolvedOnce = true
-      const link = nextResolve
+      let link = nextResolve
       nextResolve = null
+      if (!link && clipboardToken) {
+        const token = clipboardToken
+        clipboardToken = null
+        link = {
+          url: `https://links.example.com/open?click_id=${encodeURIComponent(token)}`,
+          path: '/home',
+          params: { click_id: token },
+          linkId: `clip_${token}`,
+          matchType: 'clipboard',
+          isDeferred: true,
+        }
+      }
       if (!link) return null
       pending = link
       deliverDeferredIfReady()
@@ -81,6 +125,10 @@ export function createFakeNativeBridge(): NativeBridge & FakeNativeBridgeControl
       nextResolve = link
     },
 
+    setClipboardToken(token) {
+      clipboardToken = token && token.trim().length > 0 ? token.trim() : null
+    },
+
     emitWarm(link) {
       if (mode === 'deferred-only') return
       for (const listener of listeners) {
@@ -88,14 +136,25 @@ export function createFakeNativeBridge(): NativeBridge & FakeNativeBridgeControl
       }
     },
 
+    onOpenURL(url) {
+      this.emitWarm(warmFromUrl(url))
+    },
+
+    onIntent(url) {
+      this.emitWarm(warmFromUrl(url))
+    },
+
     reset() {
       configured = false
       ready = false
       pending = null
       nextResolve = null
+      clipboardToken = null
       resolvedOnce = false
       mode = 'all'
       listeners.clear()
+      controls.lastOptions = undefined
     },
   }
+  return controls
 }

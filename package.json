@@ -12,6 +12,18 @@
       "default": "./src/index.ts",
       "react-native": "./src/index.ts"
     },
+    "./ios": {
+      "types": "./src/listeners/ios.ts",
+      "import": "./src/listeners/ios.ts",
+      "default": "./src/listeners/ios.ts",
+      "react-native": "./src/listeners/ios.ts"
+    },
+    "./android": {
+      "types": "./src/listeners/android.ts",
+      "import": "./src/listeners/android.ts",
+      "default": "./src/listeners/android.ts",
+      "react-native": "./src/listeners/android.ts"
+    },
     "./app.plugin.js": "./app.plugin.js",
     "./package.json": "./package.json"
   },

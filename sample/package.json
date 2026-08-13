@@ -1,10 +1,27 @@
 {
   "name": "@taqlyn/sdk-react-native-sample",
   "private": true,
-  "version": "0.0.0",
-  "main": "App.tsx",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "ios": "expo run:ios",
+    "android": "expo run:android",
+    "prebuild": "expo prebuild",
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
+    "@taqlyn/nav-expo-router": "file:../../nav-expo-router",
     "@taqlyn/sdk-react-native": "file:..",
-    "@taqlyn/nav-expo-router": "file:../../nav-expo-router"
+    "expo": "~54.0.36",
+    "expo-linking": "~8.0.0",
+    "expo-status-bar": "~3.0.0",
+    "react": "19.1.0",
+    "react-native": "0.81.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/react": "~19.1.10",
+    "typescript": "~5.9.2"
   }
 }

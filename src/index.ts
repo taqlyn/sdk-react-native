@@ -15,18 +15,28 @@ export {
   __setNativeBridgeForTests,
 } from './facade'
 
-export type {
-  DeferredLink,
-  MatchType,
-  Campaign,
-  ResolvePayload,
-  LinkProcessingMode,
-  ConfigureOptions,
-  LinkSubscription,
-  LinkListener,
-} from './types'
+export { createShareLink } from './share'
 
-/** Re-export bridge types for tests / advanced DI — not for feature UI. */
-export type { NativeBridge } from './adapters/native-bridge'
-export { createFakeNativeBridge } from './adapters/fake-native-bridge'
-export type { FakeNativeBridgeControls } from './adapters/fake-native-bridge'
+export {
+  observePlatformLinks,
+  observeUniversalLinks,
+  observeAppLinks,
+  isIosPlatformLink,
+  isAndroidPlatformLink,
+  __setPlatformOsForTests,
+} from './listeners/platform'
+export type { TaqlynOs } from './listeners/match'
+
+export {
+  DEFAULT_API_BASE_URL,
+  type DeferredLink,
+  type MatchType,
+  type Campaign,
+  type ResolvePayload,
+  type LinkProcessingMode,
+  type ConfigureOptions,
+  type LinkSubscription,
+  type LinkListener,
+  type ShareLink,
+  type ShareLinkInput,
+} from './types'

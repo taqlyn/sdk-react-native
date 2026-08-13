@@ -5,11 +5,32 @@ export type { DeferredLink, MatchType, Campaign, ResolvePayload } from '@taqlyn/
 /** Optional filter — avoid double-handling with Expo Router / React Navigation. */
 export type LinkProcessingMode = 'all' | 'web-only' | 'deferred-only'
 
+/** Hosted API origin. Self-host: pass `apiBaseUrl` in configure options. */
+export const DEFAULT_API_BASE_URL = 'https://api.rutvik.qzz.io'
+
 export interface ConfigureOptions {
-  apiBaseUrl: string
+  /** Override for self-host. Defaults to [DEFAULT_API_BASE_URL]. */
+  apiBaseUrl?: string
   linkProcessingMode?: LinkProcessingMode
   /** Forwarded to resolve (e.g. `sandbox` / `live`). */
   env?: string
+}
+
+export interface ShareLinkInput {
+  destinationPath?: string
+  destinationWeb?: string
+  params?: Record<string, string>
+  ogTitle?: string
+  ogDescription?: string
+  ogImage?: string
+}
+
+export interface ShareLink {
+  id: string
+  code: string
+  shortUrl: string
+  host: string
+  env: string
 }
 
 export interface LinkSubscription {

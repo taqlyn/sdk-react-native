@@ -7,29 +7,37 @@ Thin **Nitro Modules** wrapper around canonical Android / iOS **SdkCore**. Match
 ```ts
 import {
   configure,
+  createShareLink,
   resolveDeferred,
-  observeLinks,
+  observePlatformLinks,
   consume,
   setReadyForNavigation,
+  DEFAULT_API_BASE_URL,
   type DeferredLink,
   type LinkProcessingMode,
 } from '@taqlyn/sdk-react-native'
+// Or platform entrypoints: '@taqlyn/sdk-react-native/ios' | '.../android'
 
 configure(clientId, publicKeyId, {
-  apiBaseUrl: 'https://api.example.com',
+  // apiBaseUrl optional — defaults to DEFAULT_API_BASE_URL (self-host: pass yours)
   linkProcessingMode: 'all', // 'all' | 'web-only' | 'deferred-only'
   env: 'sandbox',
 })
 
+const share = await createShareLink({ destinationPath: '/offer', params: { sku: '42' } })
+
+// iOS: clipboard / App Clip / claim. Android: Play Install Referrer / claim.
 const deferred = await resolveDeferred() // DeferredLink | null
 
-const sub = observeLinks((link) => {
-  // navigate once, then:
+// Platform-only listener — clipboard matches never fire on Android, referrer never on iOS.
+const sub = observePlatformLinks((link) => {
   consume(link.linkId)
 })
 
 setReadyForNavigation(true) // deliver pending deferred to observers
 ```
+
+Navigation: `@taqlyn/nav-expo-router` (Expo Router linking + `+native-intent`) or `@taqlyn/nav-react-navigation` (`NavigationContainer` linking). When those handle warm UL/AL, set `linkProcessingMode: 'deferred-only'`.
 
 `DeferredLink` matches `@taqlyn/sdk-contract`.
 
@@ -41,6 +49,8 @@ App feature / sample
     → adapters/native-bridge (Nitro Hybrid Object)
       → Android SdkCore / iOS SdkCore
 ```
+
+Feature / sample code must use the **real Nitro autolink** — never a fake JS bridge. Unit tests may inject a fake via `__setNativeBridgeForTests`.
 
 Feature code must **not** import Nitro Hybrid types, `installreferrer`, or pasteboard kits.
 

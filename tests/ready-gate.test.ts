@@ -1,5 +1,6 @@
 import { describe, expect, test, beforeEach } from 'bun:test'
 import type { DeferredLink } from '@taqlyn/sdk-contract'
+import { createFakeNativeBridge } from '../src/adapters/fake-native-bridge'
 import {
   __setNativeBridgeForTests,
   configure,
@@ -7,7 +8,6 @@ import {
   observeLinks,
   setReadyForNavigation,
   consume,
-  createFakeNativeBridge,
 } from '../src/index'
 
 const sandboxLink: DeferredLink = {
