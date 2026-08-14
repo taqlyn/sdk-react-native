@@ -8,6 +8,7 @@ Thin **Nitro Modules** wrapper around canonical Android / iOS **SdkCore**. Match
 import {
   configure,
   createShareLink,
+  trackOpen,
   resolveDeferred,
   observePlatformLinks,
   consume,
@@ -24,7 +25,12 @@ configure(clientId, publicKeyId, {
   env: 'sandbox',
 })
 
-const share = await createShareLink({ destinationPath: '/offer', params: { sku: '42' } })
+const share = await createShareLink({
+  destinationPath: '/offer',
+  params: { sku: '42' },
+  trackUniqueUsers: true, // Starter+ hashed unique visitors
+  trackOpens: true, // reports POST /v1/events/open when consume() runs
+})
 
 // iOS: clipboard / App Clip / claim. Android: Play Install Referrer / claim.
 const deferred = await resolveDeferred() // DeferredLink | null

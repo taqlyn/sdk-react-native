@@ -23,6 +23,8 @@ export interface ShareLinkInput {
   ogTitle?: string
   ogDescription?: string
   ogImage?: string
+  trackUniqueUsers?: boolean
+  trackOpens?: boolean
 }
 
 export interface ShareLink {

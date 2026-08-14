@@ -56,6 +56,8 @@ export async function createShareLink(input: ShareLinkInput): Promise<ShareLink>
       ogTitle: input.ogTitle,
       ogDescription: input.ogDescription,
       ogImage: input.ogImage,
+      trackUniqueUsers: input.trackUniqueUsers,
+      trackOpens: input.trackOpens,
       env: session.env,
     }),
   })
@@ -77,3 +79,39 @@ export async function createShareLink(input: ShareLinkInput): Promise<ShareLink>
     env: body.env,
   }
 }
+
+let anonymousId = ''
+
+function deviceAnonymousId(): string {
+  if (anonymousId) return anonymousId
+  anonymousId =
+    (globalThis.crypto && 'randomUUID' in globalThis.crypto
+      ? globalThis.crypto.randomUUID()
+      : `anon_${Date.now()}`)
+  return anonymousId
+}
+
+/** Report that the SDK opened/consumed a link (first-party open tracking). */
+export async function trackOpen(linkId: string): Promise<void> {
+  if (!session) return
+  const id = linkId.trim()
+  if (!id) return
+  await fetch(`${session.apiBaseUrl}/v1/events/open`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Taqlyn-Client-Id': session.clientId,
+      'X-Taqlyn-Public-Key-Id': session.publicKeyId,
+    },
+    body: JSON.stringify({
+      clientId: session.clientId,
+      publicKeyId: session.publicKeyId,
+      linkId: id,
+      anonymousId: deviceAnonymousId(),
+    }),
+  }).catch(() => {
+    /* never block navigation on analytics */
+  })
+}
+

@@ -15,7 +15,7 @@ export {
   __setNativeBridgeForTests,
 } from './facade'
 
-export { createShareLink } from './share'
+export { createShareLink, trackOpen } from './share'
 
 export {
   observePlatformLinks,

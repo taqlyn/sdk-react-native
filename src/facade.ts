@@ -81,6 +81,9 @@ export async function* observeLinksAsync(): AsyncIterable<DeferredLink> {
 
 export function consume(linkId: string): void {
   getBridge().consume(linkId)
+  void import('./share').then(({ trackOpen }) => {
+    void trackOpen(linkId)
+  })
 }
 
 export function setReadyForNavigation(ready: boolean): void {
