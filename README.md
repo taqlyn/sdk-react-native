@@ -1,5 +1,7 @@
 # `@taqlyn/sdk-react-native`
 
+**Full guide:** [React Native cookbook](../../apps/docs/content/platforms/react-native.md) on the docs site.
+
 Thin **Nitro Modules** wrapper around canonical Android / iOS **SdkCore**. Matching, Play Install Referrer, pasteboard, and UL/AL observation live in native SdkCore — this package only bridges.
 
 ## Public API
