@@ -1,5 +1,14 @@
-# OSX
+# OS
 .DS_Store
+Thumbs.db
+*.swp
+*~
+*.log
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
 
 # Expo / harness
 .expo/
@@ -9,9 +18,12 @@ sample/ios/
 sample/android/
 sample/.env
 
-# VSCode
+# VSCode & IDE
 .vscode/
 jsconfig.json
+.idea/
+*.iml
+android.iml
 
 # Xcode
 build/
@@ -37,32 +49,34 @@ project.xcworkspace
 .swiftpm/
 Package.resolved
 
-# Android / IntelliJ
+# Android / Gradle
 .classpath
 .cxx
 .gradle/
 **/.gradle/
-.idea/
 .project
 .settings/
 local.properties
 **/local.properties
-*.iml
-android.iml
 .kotlin/
 **/build/
 captures/
 .externalNativeBuild/
+!gradle-wrapper.jar
 
 # Cocoapods / Ruby sample leftovers
 example/ios/Pods
 example/vendor/
 
-# Node
+# Node & package managers
 node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Yarn
 .yarn/*

@@ -6,7 +6,7 @@ export type { DeferredLink, MatchType, Campaign, ResolvePayload } from '@taqlyn/
 export type LinkProcessingMode = 'all' | 'web-only' | 'deferred-only'
 
 /** Hosted API origin. Self-host: pass `apiBaseUrl` in configure options. */
-export const DEFAULT_API_BASE_URL = 'https://api.rutvik.qzz.io'
+export const DEFAULT_API_BASE_URL = 'https://api.taqlyn.com'
 
 export interface ConfigureOptions {
   /** Override for self-host. Defaults to [DEFAULT_API_BASE_URL]. */
