@@ -46,7 +46,7 @@
     "build": "bun run typecheck"
   },
   "dependencies": {
-    "@taqlyn/sdk-contract": "file:../sdk-contract"
+    "@taqlyn/sdk-contract": "^0.1.0"
   },
   "peerDependencies": {
     "react": "*",

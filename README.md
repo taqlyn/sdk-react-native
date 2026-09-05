@@ -170,3 +170,12 @@ ios-bridge/ … Swift package tests
 expo-plugin/
 sample/
 ```
+
+## CI/CD & NPM Publishing
+
+This package publishes to npm using **Tokenless OIDC Trusted Publishing** (modeled on `react-native-nitro-google-sign-in/google-signin`):
+
+- **No static `NPM_TOKEN` required:** Uses GitHub Actions OIDC (`id-token: write`) to exchange ephemeral credentials directly with `registry.npmjs.org`.
+- **Automatic SLSA Provenance:** Emits public cryptographic Sigstore provenance attestations verifying the exact commit and workflow run.
+- **Workflow:** `.github/workflows/publish.yml` triggers on published releases or Git tags (`v*`), runs Nitrogen codegen (`bun run codegen`), builds the package, and executes `npm publish --provenance --access public`.
+
