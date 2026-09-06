@@ -23,6 +23,9 @@ jobs:
   publish:
     name: Publish to NPM
     runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/@taqlyn/sdk-react-native
     permissions:
       contents: read
       id-token: write
