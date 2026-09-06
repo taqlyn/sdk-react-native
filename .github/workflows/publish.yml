@@ -1,5 +1,8 @@
 name: Publish to NPM
 
+# Publish after com.taqlyn:taqlyn-sdk (Maven Central) and TaqlynSDK (SPM/CocoaPods)
+# are on their registries. This repo cannot wait on those other repositories.
+
 on:
   release:
     types: [published]
@@ -14,26 +17,26 @@ concurrency:
 
 permissions:
   contents: read
-  id-token: write # Required for NPM Trusted Publishing (OIDC tokenless) & Sigstore provenance
+  id-token: write
 
 jobs:
   publish:
     name: Publish to NPM
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - name: Setup Bun.js
-        uses: oven-sh/setup-bun@v2
+          node-version: "22"
+          registry-url: https://registry.npmjs.org
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-
+      - name: Install npm for trusted publishing
+        run: npm install -g npm@11.5.2
       - name: Cache bun dependencies
         uses: actions/cache@v4
         with:
@@ -41,17 +44,11 @@ jobs:
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-bun-
-
       - name: Install dependencies
         run: bun install --frozen-lockfile || bun install
-
       - name: Run code generation
         run: bun run codegen
-
       - name: Build library
         run: bun run build
-
-      - name: Publish to NPM (Tokenless Trusted Publishing)
-        # npm 11.5.1+ automatically mints an ephemeral OIDC token via GitHub Actions id-token: write
-        # No NPM_TOKEN or NODE_AUTH_TOKEN secret is required or used!
+      - name: Publish to NPM (OIDC Trusted Publishing)
         run: npm publish --provenance --access public
