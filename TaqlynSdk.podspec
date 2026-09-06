@@ -30,9 +30,7 @@ Pod::Spec.new do |s|
 
   s.dependency "React-jsi"
   s.dependency "React-callinvoker"
-
-  # TaqlynSDK (packages/sdk-ios) is an SPM package. Add it to the host iOS
-  # project via SPM path `../sdk-ios` (see README). Do not reimplement Match here.
+  s.dependency "TaqlynSDK", "~> 0.1"
 
   install_modules_dependencies(s) if defined?(install_modules_dependencies)
 end

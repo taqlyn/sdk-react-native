@@ -44,9 +44,7 @@ function env(name: string, fallback: string): string {
 }
 
 function bootSdk() {
-  const apiBaseUrl = env("TAQLYN_API_BASE_URL", "");
   configure(env("TAQLYN_CLIENT_ID", "app_sample"), env("TAQLYN_PUBLIC_KEY_ID", "pk_sample"), {
-    ...(apiBaseUrl ? { apiBaseUrl } : {}),
     linkProcessingMode: "all",
     env: "sandbox",
   });

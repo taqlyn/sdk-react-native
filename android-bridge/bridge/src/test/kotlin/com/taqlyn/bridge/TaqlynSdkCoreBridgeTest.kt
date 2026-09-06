@@ -47,7 +47,7 @@ class TaqlynSdkCoreBridgeTest {
             configureBridge(
                 referrer = "click_id=clk_sandbox",
                 resolve = { req ->
-                    assertThat(req.apiBaseUrl).isEqualTo("https://api.sandbox.example.com")
+                    assertThat(req.apiBaseUrl).isEqualTo("https://api.taqlyn.com")
                     assertThat(req.env).isEqualTo("sandbox")
                     ResolveOutcome.Matched(link)
                 },
@@ -122,7 +122,6 @@ class TaqlynSdkCoreBridgeTest {
         bridge.configure(
             clientId = "app_test",
             publicKeyId = "pk_test",
-            apiBaseUrl = "https://api.sandbox.example.com",
             linkProcessingMode = "all",
             env = "sandbox",
             context = null,

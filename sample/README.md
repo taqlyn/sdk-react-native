@@ -4,6 +4,8 @@ Proof harness for `@taqlyn/sdk-react-native`. iOS bundle ID and Android package 
 
 ## Run
 
+This in-package sample uses `file:` links to unpublished packages in this repo. Customer apps install `@taqlyn/sdk-react-native` from npm.
+
 Requires a **dev client** (Expo Go cannot use a custom bundle ID).
 
 ```bash
@@ -19,7 +21,6 @@ npx expo run:android --device emulator-5554
 Optional Metro/Expo env (after `./scripts/demo-seed.sh` from repo root):
 
 ```bash
-export TAQLYN_API_BASE_URL=${TAQLYN_BASE_URL:-https://api.rutvik.qzz.io}
 export TAQLYN_CLIENT_ID=…
 export TAQLYN_PUBLIC_KEY_ID=…
 ```

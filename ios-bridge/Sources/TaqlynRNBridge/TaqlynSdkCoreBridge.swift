@@ -38,7 +38,6 @@ public enum TaqlynSdkCoreBridge {
     public static func configure(
         clientId: String,
         publicKeyId: String,
-        apiBaseUrl: String,
         linkProcessingMode: String,
         env: String,
         pasteboard: PasteboardClient? = nil,
@@ -57,7 +56,6 @@ public enum TaqlynSdkCoreBridge {
             clientId: clientId,
             publicKeyId: publicKeyId,
             options: SdkOptions(
-                apiBaseUrl: apiBaseUrl,
                 linkProcessingMode: mode,
                 env: env.isEmpty ? nil : env
             ),

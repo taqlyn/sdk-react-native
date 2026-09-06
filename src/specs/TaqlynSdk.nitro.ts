@@ -21,6 +21,7 @@ export interface DeferredLinkPayload {
 export interface TaqlynSdk
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
   /**
+   * @param apiBaseUrl Ignored. Native SdkCore uses the baked hosted origin.
    * @param linkProcessingMode `all` | `web-only` | `deferred-only`
    * @param env empty string when unset
    */

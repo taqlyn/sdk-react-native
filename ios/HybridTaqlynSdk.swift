@@ -14,10 +14,10 @@ class HybridTaqlynSdk: HybridTaqlynSdkSpec {
     linkProcessingMode: String,
     env: String
   ) throws {
+    _ = apiBaseUrl
     TaqlynSdkCoreBridge.configure(
       clientId: clientId,
       publicKeyId: publicKeyId,
-      apiBaseUrl: apiBaseUrl,
       linkProcessingMode: linkProcessingMode,
       env: env
     )

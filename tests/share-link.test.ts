@@ -4,8 +4,8 @@ import {
   __setNativeBridgeForTests,
   configure,
   createShareLink,
-  DEFAULT_API_BASE_URL,
 } from '../src/index'
+import { API_ORIGIN } from '../src/types'
 
 describe('createShareLink + default API host', () => {
   const fake = createFakeNativeBridge()
@@ -21,22 +21,15 @@ describe('createShareLink + default API host', () => {
     __setNativeBridgeForTests(null)
   })
 
-  test('configure defaults apiBaseUrl to hosted origin', () => {
+  test('configure records options without an API origin', () => {
     configure('app_test_demo', 'pk_test_demo')
-    expect(fake.lastOptions?.apiBaseUrl).toBe(DEFAULT_API_BASE_URL)
-  })
-
-  test('self-host override wins', () => {
-    configure('app_test_demo', 'pk_test_demo', {
-      apiBaseUrl: 'https://api.self-host.example/',
-    })
-    expect(fake.lastOptions?.apiBaseUrl).toBe('https://api.self-host.example')
+    expect(fake.lastOptions).toEqual({})
   })
 
   test('POSTs /v1/sdk/short-links with public key handles', async () => {
     configure('app_test_demo', 'pk_test_demo', { env: 'sandbox' })
     globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
-      expect(String(input)).toBe(`${DEFAULT_API_BASE_URL}/v1/sdk/short-links`)
+      expect(String(input)).toBe(`${API_ORIGIN}/v1/sdk/short-links`)
       expect(init?.method).toBe('POST')
       const body = JSON.parse(String(init?.body)) as Record<string, unknown>
       expect(body.clientId).toBe('app_test_demo')

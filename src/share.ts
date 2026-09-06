@@ -1,9 +1,8 @@
-import { DEFAULT_API_BASE_URL, type ConfigureOptions, type ShareLink, type ShareLinkInput } from './types'
+import { API_ORIGIN, type ConfigureOptions, type ShareLink, type ShareLinkInput } from './types'
 
 interface Session {
   clientId: string
   publicKeyId: string
-  apiBaseUrl: string
   env?: string
 }
 
@@ -14,14 +13,12 @@ export function rememberSession(
   publicKeyId: string,
   options: ConfigureOptions,
 ): ConfigureOptions {
-  const apiBaseUrl = (options.apiBaseUrl ?? DEFAULT_API_BASE_URL).trim().replace(/\/+$/, '')
   session = {
     clientId: clientId.trim(),
     publicKeyId: publicKeyId.trim(),
-    apiBaseUrl,
     env: options.env,
   }
-  return { ...options, apiBaseUrl }
+  return options
 }
 
 export function clearSession(): void {
@@ -39,7 +36,7 @@ export async function createShareLink(input: ShareLinkInput): Promise<ShareLink>
     throw new Error('destinationPath or destinationWeb required')
   }
 
-  const res = await fetch(`${session.apiBaseUrl}/v1/sdk/short-links`, {
+  const res = await fetch(`${API_ORIGIN}/v1/sdk/short-links`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -96,7 +93,7 @@ export async function trackOpen(linkId: string): Promise<void> {
   if (!session) return
   const id = linkId.trim()
   if (!id) return
-  await fetch(`${session.apiBaseUrl}/v1/events/open`, {
+  await fetch(`${API_ORIGIN}/v1/events/open`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

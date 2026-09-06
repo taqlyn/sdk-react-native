@@ -28,7 +28,6 @@ export {
 export type { TaqlynOs } from './listeners/match'
 
 export {
-  DEFAULT_API_BASE_URL,
   type DeferredLink,
   type MatchType,
   type Campaign,

@@ -5,12 +5,10 @@ export type { DeferredLink, MatchType, Campaign, ResolvePayload } from '@taqlyn/
 /** Optional filter — avoid double-handling with Expo Router / React Navigation. */
 export type LinkProcessingMode = 'all' | 'web-only' | 'deferred-only'
 
-/** Hosted API origin. Self-host: pass `apiBaseUrl` in configure options. */
-export const DEFAULT_API_BASE_URL = 'https://api.taqlyn.com'
+/** Hosted control-plane origin. Not a public configure option. */
+export const API_ORIGIN = 'https://api.taqlyn.com'
 
 export interface ConfigureOptions {
-  /** Override for self-host. Defaults to [DEFAULT_API_BASE_URL]. */
-  apiBaseUrl?: string
   linkProcessingMode?: LinkProcessingMode
   /** Forwarded to resolve (e.g. `sandbox` / `live`). */
   env?: string

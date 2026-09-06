@@ -17,6 +17,7 @@ import java.util.HashMap
 @DoNotStrip
 @Keep
 class HybridTaqlynSdk : HybridTaqlynSdkSpec() {
+  @Suppress("UNUSED_PARAMETER")
   override fun configure(
     clientId: String,
     publicKeyId: String,
@@ -27,7 +28,6 @@ class HybridTaqlynSdk : HybridTaqlynSdkSpec() {
     TaqlynSdkCoreBridge.configure(
       clientId = clientId,
       publicKeyId = publicKeyId,
-      apiBaseUrl = apiBaseUrl,
       linkProcessingMode = linkProcessingMode,
       env = env,
       context = resolveAppContext(),

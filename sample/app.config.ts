@@ -26,8 +26,6 @@ const config: ExpoConfig = {
     package: "com.cenomi.mallsapp",
   },
   extra: {
-    taqlynApiBaseUrl:
-      process.env.TAQLYN_API_BASE_URL ?? "https://api.rutvik.qzz.io",
     taqlynClientId: process.env.TAQLYN_CLIENT_ID ?? "app_sample",
     taqlynPublicKeyId: process.env.TAQLYN_PUBLIC_KEY_ID ?? "pk_sample",
   },

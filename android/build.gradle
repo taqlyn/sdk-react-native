@@ -124,8 +124,6 @@ android {
 repositories {
   mavenCentral()
   google()
-  // Local sibling sdk-android (publishToMavenLocal) when includeBuild is unavailable.
-  mavenLocal()
 }
 
 dependencies {
@@ -133,9 +131,7 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation project(":react-native-nitro-modules")
 
-  // Canonical Android SdkCore — prefer composite includeBuild from the host app
-  // settings.gradle (see README). Falls back to mavenLocal `com.taqlyn:taqlyn-sdk`.
-  implementation "com.taqlyn:taqlyn-sdk:0.1.0-SNAPSHOT"
+  implementation "com.taqlyn:taqlyn-sdk:0.1.0"
 
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0"
 }

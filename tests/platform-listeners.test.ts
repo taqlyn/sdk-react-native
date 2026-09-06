@@ -48,9 +48,7 @@ describe('platform-only listeners', () => {
     fake.reset()
     __setNativeBridgeForTests(fake)
     __setPlatformOsForTests(null)
-    configure('app_test', 'pk_test', {
-      apiBaseUrl: 'https://api.sandbox.example.com',
-    })
+    configure('app_test', 'pk_test')
   })
 
   test('filter helpers: clipboard is iOS-only, referrer is Android-only', () => {

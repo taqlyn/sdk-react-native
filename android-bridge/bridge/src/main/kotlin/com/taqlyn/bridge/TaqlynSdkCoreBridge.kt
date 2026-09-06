@@ -43,7 +43,6 @@ class TaqlynSdkCoreBridge(
     fun configure(
         clientId: String,
         publicKeyId: String,
-        apiBaseUrl: String,
         linkProcessingMode: String,
         env: String,
         context: Context? = null,
@@ -57,7 +56,6 @@ class TaqlynSdkCoreBridge(
             publicKeyId = publicKeyId,
             options =
                 SdkOptions(
-                    apiBaseUrl = apiBaseUrl,
                     linkProcessingMode = parseMode(linkProcessingMode),
                     env = env.takeIf { it.isNotBlank() },
                 ),

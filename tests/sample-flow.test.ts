@@ -31,7 +31,6 @@ test('sample flow: configure → resolveDeferred → observe → consume', async
   __setNativeBridgeForTests(bridge)
 
   configure('app_test_demo', 'pk_test_demo', {
-    apiBaseUrl: 'https://api.example.test',
     env: 'sandbox',
   })
   bridge.setDeferredResult(seed)

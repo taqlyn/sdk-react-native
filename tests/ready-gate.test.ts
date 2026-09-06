@@ -27,7 +27,6 @@ describe('ready gate + deferred resolve (fake bridge)', () => {
     fake.reset()
     __setNativeBridgeForTests(fake)
     configure('app_test', 'pk_test', {
-      apiBaseUrl: 'https://api.sandbox.example.com',
       env: 'sandbox',
     })
   })

@@ -1,9 +1,3 @@
-// Add to the host React Native / Expo app's settings.gradle (sibling checkout):
-//
-// includeBuild("../../sdk-android") {
-//   dependencySubstitution {
-//     substitute(module("com.taqlyn:taqlyn-sdk")).using(project(":taqlyn-sdk"))
-//   }
-// }
-//
-// Or publish once: `cd ../sdk-android && ./gradlew :taqlyn-sdk:publishToMavenLocal`
+// Host apps consume `com.taqlyn:taqlyn-sdk` from Maven Central after the
+// Android SDK is published. Do not includeBuild a local sdk-android checkout
+// in customer apps.

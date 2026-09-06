@@ -15,14 +15,12 @@ import {
   observePlatformLinks,
   consume,
   setReadyForNavigation,
-  DEFAULT_API_BASE_URL,
   type DeferredLink,
   type LinkProcessingMode,
 } from '@taqlyn/sdk-react-native'
 // Or platform entrypoints: '@taqlyn/sdk-react-native/ios' | '.../android'
 
 configure(clientId, publicKeyId, {
-  // apiBaseUrl optional — defaults to DEFAULT_API_BASE_URL (self-host: pass yours)
   linkProcessingMode: 'all', // 'all' | 'web-only' | 'deferred-only'
   env: 'sandbox',
 })
@@ -98,35 +96,9 @@ Commit `nitrogen/generated/` when present. After changing `src/specs/*.nitro.ts`
 
 ## Native SdkCore wiring
 
-### Android
+Published `@taqlyn/sdk-react-native` pulls `com.taqlyn:taqlyn-sdk` from Maven Central. Host apps must not `includeBuild` a local `sdk-android` checkout.
 
-Prefer composite build from the host app `settings.gradle`:
-
-```gradle
-includeBuild("../sdk-android") {
-  dependencySubstitution {
-    substitute(module("com.taqlyn:taqlyn-sdk")).using(project(":taqlyn-sdk"))
-  }
-}
-```
-
-Or publish once:
-
-```bash
-cd ../sdk-android && ./gradlew :taqlyn-sdk:publishToMavenLocal
-```
-
-See `android/settings.include.gradle.example`.
-
-### iOS
-
-Add SPM package path to the host app (sibling checkout):
-
-```swift
-// Package / Xcode → Local → ../sdk-ios (product: TaqlynSDK)
-```
-
-Hybrid Swift imports `TaqlynSDK` and calls `SdkCore`.
+iOS: CocoaPods / the Nitro podspec depends on published `TaqlynSDK` (SPM: `https://github.com/taqlyn/sdk-ios.git`). Do not add a local `packages/sdk-ios` path in customer apps.
 
 ## Sample
 
