@@ -1,9 +1,13 @@
 {
   "name": "@taqlyn/sdk-react-native",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taqlyn/sdk-react-native.git"
   },
   "description": "Taqlyn React Native SDK — Nitro Hybrid Objects wrapping native Android/iOS SdkCore",
   "main": "./src/index.ts",
