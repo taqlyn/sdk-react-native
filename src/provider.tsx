@@ -1,6 +1,7 @@
 import type { DeferredLink } from '@taqlyn/sdk-contract'
 import {
   createContext,
+  createElement,
   useCallback,
   useContext,
   useEffect,
@@ -11,11 +12,11 @@ import {
 import {
   configure,
   consume,
-  observePlatformLinks,
   resolveDeferred,
   setReadyForNavigation,
 } from './facade'
 import { awaitPendingExpand } from './expand'
+import { observePlatformLinks } from './listeners/platform'
 import type { ConfigureOptions } from './types'
 
 export type TaqlynContextValue = {
@@ -67,7 +68,7 @@ export function TaqlynProvider({
       return
     }
     let cancelled = false
-    const sub = observePlatformLinks((next) => {
+    const sub = observePlatformLinks((next: DeferredLink) => {
       if (!cancelled) setLink(next)
     })
     void (async () => {
@@ -102,7 +103,7 @@ export function TaqlynProvider({
     [isLinkProcessed, link, clearLink, ready, setReady],
   )
 
-  return <TaqlynContext.Provider value={value}>{children}</TaqlynContext.Provider>
+  return createElement(TaqlynContext.Provider, { value }, children)
 }
 
 export function useTaqlynContext(): TaqlynContextValue {

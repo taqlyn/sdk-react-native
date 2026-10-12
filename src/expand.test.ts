@@ -48,7 +48,7 @@ describe('resolveIncomingUrl', () => {
       hosts: ['https://go.example.com'],
       timeoutMs: 30,
     })
-    globalThis.fetch = mock(() => new Promise(() => {})) as typeof fetch
+    globalThis.fetch = mock(() => new Promise(() => {})) as unknown as typeof fetch
     const got = await resolveIncomingUrl('https://go.example.com/Ab12Cd')
     expect(got).toEqual({ href: '/home' })
   })
@@ -73,7 +73,7 @@ describe('resolveIncomingUrl', () => {
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } },
       ),
-    ) as typeof fetch
+    ) as unknown as typeof fetch
 
     const first = await resolveIncomingUrl('https://go.example.com/Ab12Cd')
     expect(first).toEqual({ href: '/splash', pendingExpand: true })
