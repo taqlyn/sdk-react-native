@@ -1,6 +1,6 @@
 {
   "name": "@taqlyn/sdk-react-native",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/taqlyn/sdk-react-native.git"
   },
-  "description": "Taqlyn React Native SDK — Nitro Hybrid Objects wrapping native Android/iOS SdkCore",
+  "description": "Taqlyn React Native SDK \u2014 Nitro Hybrid Objects wrapping native Android/iOS SdkCore",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "react-native": "./src/index.ts",
@@ -54,7 +54,7 @@
     "build": "bun run typecheck"
   },
   "dependencies": {
-    "@taqlyn/sdk-contract": "^0.1.0"
+    "@taqlyn/sdk-contract": "^0.2.0"
   },
   "peerDependencies": {
     "react": "*",
@@ -62,9 +62,15 @@
     "react-native-nitro-modules": "*"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "react-native": { "optional": true },
-    "react-native-nitro-modules": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-nitro-modules": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/bun": "^1.2.0",
