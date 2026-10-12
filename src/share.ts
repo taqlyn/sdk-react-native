@@ -1,3 +1,5 @@
+import { rememberExpandSession, clearExpandSession } from './expand'
+import type { AnalyticsEventName } from '@taqlyn/sdk-contract'
 import { API_ORIGIN, type ConfigureOptions, type ShareLink, type ShareLinkInput } from './types'
 
 interface Session {
@@ -18,11 +20,13 @@ export function rememberSession(
     publicKeyId: publicKeyId.trim(),
     env: options.env,
   }
+  rememberExpandSession(clientId, publicKeyId, options)
   return options
 }
 
 export function clearSession(): void {
   session = null
+  clearExpandSession()
 }
 
 /** Create a unified short link for in-app sharing (public key id only). */
@@ -109,6 +113,31 @@ export async function trackOpen(linkId: string): Promise<void> {
     }),
   }).catch(() => {
     /* never block navigation on analytics */
+  })
+}
+
+/** Custom SDK analytics event (fire-and-forget; never throws). */
+export function logEvent(name: AnalyticsEventName, data?: Record<string, unknown>): void {
+  if (!session) return
+  const eventName = String(name).trim()
+  if (!eventName) return
+  void fetch(`${API_ORIGIN}/v1/events/sdk`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Taqlyn-Client-Id': session.clientId,
+      'X-Taqlyn-Public-Key-Id': session.publicKeyId,
+    },
+    body: JSON.stringify({
+      clientId: session.clientId,
+      publicKeyId: session.publicKeyId,
+      name: eventName,
+      data: data ?? undefined,
+      env: session.env,
+    }),
+  }).catch(() => {
+    /* never block app on analytics */
   })
 }
 

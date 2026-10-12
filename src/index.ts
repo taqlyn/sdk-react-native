@@ -15,7 +15,19 @@ export {
   __setNativeBridgeForTests,
 } from './facade'
 
-export { createShareLink, trackOpen } from './share'
+export { createShareLink, trackOpen, logEvent } from './share'
+export {
+  resolveShortLink,
+  resolveIncomingUrl,
+  awaitPendingExpand,
+} from './expand'
+
+export {
+  TaqlynProvider,
+  useTaqlynContext,
+  useTaqlynGate,
+} from './provider'
+export type { TaqlynProviderProps, TaqlynContextValue } from './provider'
 
 export {
   observePlatformLinks,
@@ -32,10 +44,15 @@ export {
   type MatchType,
   type Campaign,
   type ResolvePayload,
+  type ResolveMode,
+  type ExpandResult,
+  type ResolvedNavTarget,
   type LinkProcessingMode,
   type ConfigureOptions,
   type LinkSubscription,
   type LinkListener,
   type ShareLink,
   type ShareLinkInput,
+  type AnalyticsEventName,
+  effectiveResolveMode,
 } from './types'
