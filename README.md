@@ -11,18 +11,27 @@ import {
   configure,
   createShareLink,
   trackOpen,
+  logEvent,
   resolveDeferred,
+  resolveIncomingUrl,
+  awaitPendingExpand,
   observePlatformLinks,
   consume,
   setReadyForNavigation,
+  TaqlynProvider,
+  useTaqlynGate,
   type DeferredLink,
   type LinkProcessingMode,
 } from '@taqlyn/sdk-react-native'
 // Or platform entrypoints: '@taqlyn/sdk-react-native/ios' | '.../android'
 
 configure(clientId, publicKeyId, {
-  linkProcessingMode: 'all', // 'all' | 'web-only' | 'deferred-only'
+  linkProcessingMode: 'deferred-only', // when +native-intent owns warm URLs
   env: 'sandbox',
+  resolveMode: 'await', // or 'optimistic'
+  fallbackPath: '/',
+  hosts: ['https://go.example.com'],
+  timeoutMs: 1500,
 })
 
 const share = await createShareLink({
@@ -35,17 +44,22 @@ const share = await createShareLink({
 // iOS: clipboard / App Clip / claim. Android: Play Install Referrer / claim.
 const deferred = await resolveDeferred() // DeferredLink | null
 
+// Warm short-code → in-app path (POST /v1/links/expand)
+const nav = await resolveIncomingUrl('https://go.example.com/Ab12Cd')
+
 // Platform-only listener — clipboard matches never fire on Android, referrer never on iOS.
 const sub = observePlatformLinks((link) => {
-  consume(link.linkId)
+  consume(link.linkId) // also fires trackOpen
 })
+
+void logEvent('view_item', { sku: '42' }) // POST /v1/events/sdk (202)
 
 setReadyForNavigation(true) // deliver pending deferred to observers
 ```
 
-Navigation: `@taqlyn/nav-expo-router` (Expo Router linking + `+native-intent`) or `@taqlyn/nav-react-navigation` (`NavigationContainer` linking). When those handle warm UL/AL, set `linkProcessingMode: 'deferred-only'`.
+Prefer `TaqlynProvider` + `useTaqlynGate` for auth/onboarding hold (Detour-style). Navigation: `@taqlyn/nav-expo-router` (`createTaqlynNativeIntentHandler`) or `@taqlyn/nav-react-navigation` (`createTaqlynExpandingLinking` / `createTaqlynDeferredLinking`).
 
-`DeferredLink` matches `@taqlyn/sdk-contract`.
+`DeferredLink` matches `@taqlyn/sdk-contract`. Guides: [short-link-expand](../../docs/guides/short-link-expand.md) · [detour-parity-gaps](../../docs/guides/detour-parity-gaps.md).
 
 ## Architecture
 
