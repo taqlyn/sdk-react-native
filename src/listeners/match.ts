@@ -9,6 +9,7 @@ const IOS_DEFERRED: ReadonlySet<MatchType> = new Set([
 const ANDROID_DEFERRED: ReadonlySet<MatchType> = new Set([
   'install_referrer',
   'claim',
+  'fingerprint',
 ])
 
 /** Warm UL, or deferred clipboard / App Clip / claim. */
