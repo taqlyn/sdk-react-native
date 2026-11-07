@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/taqlyn/sdk-react-native.git"
   },
-  "description": "Taqlyn React Native SDK \u2014 Nitro Hybrid Objects wrapping native Android/iOS SdkCore",
+  "description": "Taqlyn React Native SDK — Nitro Hybrid Objects wrapping native Android/iOS SdkCore",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "react-native": "./src/index.ts",
@@ -73,10 +73,10 @@
     }
   },
   "devDependencies": {
-    "@types/bun": "^1.2.0",
-    "@types/react": "^19.0.0",
-    "nitrogen": "^0.36.1",
-    "react-native-nitro-modules": "^0.36.1",
-    "typescript": "^5.8.2"
+    "@types/bun": "^1.4.4",
+    "@types/react": "^19.3.0",
+    "nitrogen": "^0.36.5",
+    "react-native-nitro-modules": "^0.36.5",
+    "typescript": "^5.9.3"
   }
 }
