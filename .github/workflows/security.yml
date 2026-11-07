@@ -3,8 +3,7 @@ name: Security (Trivy)
 # Fails on fixable HIGH/CRITICAL dependency vulnerabilities. Runs on every push and
 # pull request, and weekly because new CVEs are published against unchanged code.
 # Trivy runs from a pinned container image (no third-party action to trust).
-# sample/ is the Expo demo app (not published); its lockfile cannot be regenerated
-# outside the full workspace, so it is excluded until it is updated there.
+# .trivyignore.yaml holds the one accepted exception (sample app, see that file).
 
 on:
   push:
@@ -46,5 +45,5 @@ jobs:
               --ignore-unfixed \
               --exit-code 1 \
               --skip-dirs '**/node_modules' \
-              --skip-dirs sample \
+              --ignorefile /src/.trivyignore.yaml \
               /src
