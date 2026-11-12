@@ -44,7 +44,7 @@ function env(name: string, fallback: string): string {
 }
 
 function bootSdk() {
-  configure(env("TAQLYN_CLIENT_ID", "app_sample"), env("TAQLYN_PUBLIC_KEY_ID", "pk_sample"), {
+  configure(env("TAQLYN_CLIENT_ID", "app_test_c27823217223510869bf57871b3dce07"), env("TAQLYN_PUBLIC_KEY_ID", "pk_test_c27823217223510869bf57871b3dce07"), {
     linkProcessingMode: "all",
     env: "sandbox",
   });
@@ -52,16 +52,37 @@ function bootSdk() {
 
 bootSdk();
 
+/** DEBUG: click the share link as Android would, then resolve its Play referrer once. */
+async function simulateDeferred(shortUrl: string): Promise<string> {
+  const click = await fetch(shortUrl, {
+    headers: { "User-Agent": "Mozilla/5.0 (Linux; Android 14; Pixel 8) Chrome/120 Mobile" },
+  });
+  const referrer = decodeURIComponent(new URL(click.url).searchParams.get("referrer") ?? "");
+  const res = await fetch("https://uat.api.taqlyn.com/v1/resolve", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      clientId: "app_test_c27823217223510869bf57871b3dce07",
+      publicKeyId: "pk_test_c27823217223510869bf57871b3dce07",
+      referrer,
+      env: "sandbox",
+    }),
+  });
+  const body = await res.json();
+  return JSON.stringify(body.deferredLink ?? null);
+}
+
 const os: TaqlynOs =
   Platform.OS === "ios" || Platform.OS === "android" ? Platform.OS : "unknown";
 
+const hosts = [
+  "cenomi-centers-sandbox.uat.links.taqlyn.com",
+  "cenomi-centers-production.uat.links.taqlyn.com",
+  "cenomi-uat.touchpay.qzz.io",
+];
+
 const linking = createTaqlynLinking({
-  prefixes: [
-    "https://new-application-production.rutvik.qzz.io",
-    "https://new-application-sandbox.rutvik.qzz.io",
-    "https://demo-application-production.rutvik.qzz.io",
-    "https://go.rutvik.qzz.io",
-  ],
+  prefixes: hosts.map((host) => `https://${host}`),
   scheme: "cenomimalls",
 });
 
@@ -72,7 +93,7 @@ function isProductDeepLink(url: string): boolean {
     const u = new URL(url);
     if (u.protocol === "cenomimalls:") return true;
     const host = u.hostname.toLowerCase();
-    if (host.endsWith("rutvik.qzz.io") || host === "mark-pr.riddhu.qzz.io") {
+    if (hosts.includes(host)) {
       return true;
     }
     if (u.pathname === "/home" || u.pathname.startsWith("/open")) return true;
@@ -116,7 +137,12 @@ export default function App() {
     void (async () => {
       setStatus(os === "ios" ? "resolving-clipboard" : "resolving-referrer");
       await resolveDeferred();
-      setStatus("waiting-ready");
+      // SdkCore holds the deferred link until the app is ready; release it now
+      // that the listener is subscribed so it reaches observePlatformLinks.
+      whenReadyNavigate(() => {
+        setReadyForNavigation(true);
+      });
+      setStatus("waiting-link");
     })();
 
     const stopWarm = subscribeWarmLinks(Linking, (url) => {
@@ -150,6 +176,14 @@ export default function App() {
                 setStatus(`share:${link.code}`);
               } catch (err) {
                 setStatus(`share-error:${String(err)}`);
+              }
+            }}
+            onSimulate={async () => {
+              if (!shareUrl) return setStatus("simulate-needs-share-link");
+              try {
+                setStatus(`simulate:${await simulateDeferred(shareUrl)}`);
+              } catch (err) {
+                setStatus(`simulate-error:${String(err)}`);
               }
             }}
             onConsume={() => {
@@ -194,21 +228,23 @@ function HomeScreen({
   pending,
   shareUrl,
   onShare,
+  onSimulate,
   onConsume,
-}: {
+}: Readonly<{
   status: string;
   href: string | null;
   openedUrl: string | null;
   pending: DeferredLink | null;
   shareUrl: string | null;
   onShare: () => void;
+  onSimulate: () => void;
   onConsume: () => void;
-}) {
+}>) {
   return (
     <View style={styles.screen}>
       <Text style={styles.kicker}>Home</Text>
-      <Text style={styles.title}>Cenomi Malls</Text>
-      <Text style={styles.meta}>com.cenomi.mallsapp</Text>
+      <Text style={styles.title}>Taqlyn Link Tester</Text>
+      <Text style={styles.meta}>com.taqlyn.test</Text>
       <View style={styles.card}>
         <Text style={styles.cardLabel}>Deep link</Text>
         <Text style={styles.cardValue}>{openedUrl ?? href ?? "None yet"}</Text>
@@ -218,6 +254,9 @@ function HomeScreen({
         ) : null}
         <Pressable style={styles.primaryBtn} onPress={onShare}>
           <Text style={styles.primaryBtnText}>Create share link</Text>
+        </Pressable>
+        <Pressable style={styles.primaryBtn} onPress={onSimulate}>
+          <Text style={styles.primaryBtnText}>Debug: simulate deferred</Text>
         </Pressable>
         {pending ? (
           <Pressable style={styles.primaryBtn} onPress={onConsume}>
@@ -229,7 +268,7 @@ function HomeScreen({
   );
 }
 
-function PlaceholderScreen({ title, subtitle }: { title: string; subtitle: string }) {
+function PlaceholderScreen({ title, subtitle }: Readonly<{ title: string; subtitle: string }>) {
   return (
     <View style={styles.screen}>
       <Text style={styles.kicker}>{title}</Text>
@@ -243,11 +282,11 @@ function TabButton({
   label,
   active,
   onPress,
-}: {
+}: Readonly<{
   label: string;
   active: boolean;
   onPress: () => void;
-}) {
+}>) {
   return (
     <Pressable style={styles.tabBtn} onPress={onPress}>
       <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>{label}</Text>

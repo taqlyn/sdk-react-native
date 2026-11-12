@@ -9,12 +9,11 @@ const contractRoot = path.resolve(projectRoot, "../../sdk-contract");
 
 const config = getDefaultConfig(projectRoot);
 
-config.watchFolders = [sdkRoot, navRoot, contractRoot, workspaceRoot];
+config.watchFolders = [sdkRoot, navRoot, contractRoot];
 
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, "node_modules"),
   path.resolve(sdkRoot, "node_modules"),
-  path.resolve(workspaceRoot, "node_modules"),
 ];
 
 config.resolver.extraNodeModules = {

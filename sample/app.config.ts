@@ -1,18 +1,15 @@
 import type { ExpoConfig } from "expo/config";
 
 const linkingHosts = [
-  "demo-application-sandbox.rutvik.qzz.io",
-  "demo-application-production.rutvik.qzz.io",
-  "new-application-sandbox.rutvik.qzz.io",
-  "new-application-production.rutvik.qzz.io",
-  "go.rutvik.qzz.io",
-  "mark-pr.riddhu.qzz.io",
+  "cenomi-centers-sandbox.uat.links.taqlyn.com",
+  "cenomi-centers-production.uat.links.taqlyn.com",
+  "cenomi-uat.touchpay.qzz.io"
 ];
 
 const config: ExpoConfig = {
-  name: "Cenomi Malls",
+  name: "Taqlyn Link Tester",
   slug: "cenomi-malls",
-  version: "1.0.0",
+  version: "2.12.3",
   orientation: "portrait",
   scheme: "cenomimalls",
   userInterfaceStyle: "automatic",
@@ -23,7 +20,7 @@ const config: ExpoConfig = {
     supportsTablet: true,
   },
   android: {
-    package: "com.cenomi.mallsapp",
+    package: "com.taqlyn.test",
   },
   extra: {
     taqlynClientId: process.env.TAQLYN_CLIENT_ID ?? "app_sample",
